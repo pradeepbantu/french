@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Verbes en -oir</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,700;1,6..72,500;1,6..72,700&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: one narrow column like a pocket conjugation guide — verb chips, tense rail, then a tappable table or quiz card. */
+:root{
+  --paper:#f3f6f6; --card:#ffffff; --ink:#123c42; --muted:#5b7376; --line:#d5e1e2;
+  --teal:#1b6f78; --teal-soft:#e1eff0; --rose:#c21d5c; --rose-soft:#fbe6ee;
+  --ok:#1f7a45; --ok-soft:#e3f3e8; --warn:#9a6300; --warn-soft:#fbf0d9;
+  --display:"Newsreader", Georgia, "Times New Roman", serif;
+  --body:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0e1b1d; --card:#152629; --ink:#e3eeee; --muted:#93abad; --line:#28403f;
+  --teal:#5fc1c9; --teal-soft:#183a3e; --rose:#ff6f9f; --rose-soft:#3a1826;
+  --ok:#62d08e; --ok-soft:#173726; --warn:#f0b54a; --warn-soft:#3a2c10; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0e1b1d; --card:#152629; --ink:#e3eeee; --muted:#93abad; --line:#28403f;
+  --teal:#5fc1c9; --teal-soft:#183a3e; --rose:#ff6f9f; --rose-soft:#3a1826;
+  --ok:#62d08e; --ok-soft:#173726; --warn:#f0b54a; --warn-soft:#3a2c10; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:16px/1.5 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+h1{font:700 2rem/1.05 var(--display);margin:0;text-wrap:balance}
+h1 em{color:var(--rose);font-style:italic}
+.sub{color:var(--muted);font-size:.9rem;margin:4px 0 0}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.label{font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px;font:500 1.05rem var(--display);font-style:italic}
+.chip[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:var(--paper)}
+.fam{display:flex;gap:6px;flex-wrap:wrap;align-items:center;width:100%}
+.chip.der{font-size:.92rem;padding:4px 11px;border-style:dashed}
+.chip.small{font:700 .8rem var(--body);font-style:normal;padding:5px 11px}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);background:var(--teal-soft);border-radius:12px;padding:4px;gap:4px}
+.tabs button{border:0;background:transparent;border-radius:9px;padding:9px 4px;font-weight:700;font-size:.92rem;color:var(--teal)}
+.tabs button[aria-selected="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.tenses{display:flex;flex-direction:column;gap:8px}
+.mood{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.mood .label{width:100%}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+.verbhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.verbhead h2{font:700 1.6rem var(--display);margin:0}
+.verbhead h2 small{font:italic 500 1rem var(--display);color:var(--rose);margin-left:6px}
+table{width:100%;border-collapse:collapse}
+td{padding:0}
+.line{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:11px 6px;border-radius:8px}
+tr:last-child .line{border-bottom:0}
+.line:hover{background:var(--teal-soft)}
+.line.on{background:var(--rose-soft)}
+.pron{color:var(--muted);min-width:5.6em;text-align:right;font-size:.95rem}
+.form{font:500 1.3rem var(--display);flex:1;min-width:0}
+.form b{color:var(--rose);font-weight:700}
+.form .en,.prompt .en{display:block;font:400 .82rem/1.3 var(--body);color:var(--muted);margin-top:1px}
+.spk{width:22px;height:22px;flex:none;color:var(--teal)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.btn{border:0;background:var(--teal);color:var(--paper);border-radius:10px;padding:10px 16px;font-weight:700;display:inline-flex;align-items:center;gap:8px}
+.btn.alt{background:var(--teal-soft);color:var(--teal)}
+.btn.rose{background:var(--rose);color:#fff}
+.btn:disabled{opacity:.5;cursor:default}
+.setting{display:flex;align-items:center;gap:8px;font-size:.88rem;color:var(--muted)}
+.setting input[type=range]{width:110px;accent-color:var(--teal)}
+.setting input[type=checkbox]{accent-color:var(--teal);width:18px;height:18px}
+.extra{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px 14px;font-size:.92rem}
+.extra div{min-width:0}
+.extra span{display:block}
+.notes{background:var(--warn-soft);border-radius:14px;padding:14px 16px}
+.notes ul{margin:6px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:.93rem}
+.notes .label{color:var(--warn)}
+.quizcard{display:flex;flex-direction:column;gap:14px}
+.prompt{font:500 1.15rem var(--display);line-height:1.4}
+.prompt .big{display:block;font:700 1.9rem var(--display);color:var(--ink)}
+.prompt .tag{display:inline-block;background:var(--teal-soft);color:var(--teal);border-radius:6px;padding:1px 8px;font:700 .8rem var(--body);margin:0 4px 4px 0}
+.answer{display:flex;gap:8px;align-items:stretch}
+.answer .pre{align-self:center;color:var(--muted);font-size:1.05rem;white-space:nowrap}
+.answer input{flex:1;min-width:0;border:2px solid var(--line);background:var(--paper);border-radius:10px;padding:10px 12px;font:500 1.25rem var(--display)}
+.answer input:focus{border-color:var(--teal);outline:none}
+.accents{display:flex;gap:6px;flex-wrap:wrap}
+.accents button{border:1px solid var(--line);background:var(--paper);border-radius:8px;width:38px;height:38px;font:500 1.1rem var(--display)}
+.fb{border-radius:10px;padding:10px 12px;font-weight:700}
+.fb.ok{background:var(--ok-soft);color:var(--ok)}
+.fb.near{background:var(--warn-soft);color:var(--warn)}
+.fb.bad{background:var(--rose-soft);color:var(--rose)}
+.fb .sol{display:block;font:500 1.15rem var(--display);color:var(--ink);margin-top:2px}
+.score{display:flex;gap:16px;font-size:.88rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.score b{color:var(--ink);font-size:1.05rem}
+.warnbox{background:var(--warn-soft);color:var(--warn);border-radius:10px;padding:10px 12px;font-size:.9rem}
+@media (prefers-reduced-motion:no-preference){.line{transition:background .15s}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Verbes en <em>-oir</em></h1>
+      <p class="sub">Every verb in -voir · tap any line to hear it</p>
+    </div>
+    <div class="row" style="align-items:center;gap:14px">
+      <label class="setting"><input type="checkbox" id="entog"> English</label>
+      <label class="setting">Voix <select id="voice" style="max-width:150px"></select></label>
+    </div>
+  </header>
+
+  <div id="nospeech" class="warnbox" hidden>This browser has no French voice available. Tables and quizzes still work; try Safari or Chrome for audio.</div>
+
+  <div>
+    <div class="label" style="margin-bottom:6px">Verbe</div>
+    <div class="row" id="verbs" style="gap:8px"></div>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tab-table" aria-selected="true">Écouter</button>
+    <button role="tab" id="tab-quiz" aria-selected="false">Conjuguer</button>
+    <button role="tab" id="tab-dict" aria-selected="false">Dictée</button>
+  </div>
+
+  <div class="tenses" id="tenses"></div>
+
+  <section class="panel" id="view-table">
+    <div class="verbhead"><h2 id="vt-title"></h2><span class="label" id="vt-tense"></span></div>
+    <table><tbody id="rows"></tbody></table>
+    <div class="controls">
+      <button class="btn" id="playall"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11l9-5.5z"/></svg>Play all</button>
+      <button class="btn alt" id="stop" hidden>Stop</button>
+      <label class="setting"><input type="checkbox" id="shadow"> Pause to repeat</label>
+      <label class="setting"><input type="checkbox" id="loop"> Loop</label>
+      <label class="setting">Speed <input type="range" id="rate" min="0.5" max="1.2" step="0.05" value="0.85"></label>
+    </div>
+    <div class="extra" id="extra"></div>
+  </section>
+
+  <section class="panel quizcard" id="view-quiz" hidden>
+    <div class="row">
+      <button class="chip small" id="mixv" aria-pressed="false">Mix all verbs</button>
+      <button class="chip small" id="mixt" aria-pressed="false">Mix all tenses</button>
+    </div>
+    <div class="prompt" id="q-prompt"></div>
+    <div class="answer"><span class="pre" id="q-pre"></span><input id="q-in" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="type the form"></div>
+    <div class="accents" id="acc"></div>
+    <div class="row">
+      <button class="btn" id="q-check">Check</button>
+      <button class="btn alt" id="q-hear" hidden>🔊 Hear again</button>
+      <button class="btn alt" id="q-skip">Show answer</button>
+    </div>
+    <div id="q-fb"></div>
+    <div class="score"><span>Streak <b id="s-streak">0</b></span><span>Correct <b id="s-ok">0</b></span><span>Tried <b id="s-all">0</b></span></div>
+  </section>
+
+  <aside class="notes" id="notes"></aside>
+</div>
+
+<script>
+const IMP=['ais','ais','ait','ions','iez','aient'], FUT=['ai','as','a','ons','ez','ont'];
+const end=(s,e)=>e.map(x=>s+x);
+const AUX={
+  pc:['ai','as','a','avons','avez','ont'], pqp:end('av',IMP), pa:['eus','eus','eut','eûmes','eûtes','eurent'],
+  fa:end('aur',FUT), cp:end('aur',IMP), sp:['aie','aies','ait','ayons','ayez','aient'],
+  spq:['eusse','eusses','eût','eussions','eussiez','eussent'], ip:['aie','ayons','ayez']};
+// ---- derived verbs: add the same prefix to every form
+function derive(base,pre,extra){
+  const b=V[base], P=s=>s.split('|').map(x=>pre+x).join('|'), A=a=>a&&a.map(P);
+  return Object.assign({pres:A(b.pres),imp:pre+b.imp,ps:A(b.ps),fut:pre+b.fut,subj:A(b.subj),si:A(b.si),ipr:A(b.ipr),
+    pp:pre+b.pp,agr:pre+b.agr,ppr:pre+b.ppr,hint:b.hint,model:base,notes:[]},extra||{});
+}
+function cevoir(pre){
+  const r=pre+'ce', c=pre+'ç';
+  return {pres:[c+'ois',c+'ois',c+'oit',r+'vons',r+'vez',c+'oivent'],imp:r+'v',
+    ps:[c+'us',c+'us',c+'ut',c+'ûmes',c+'ûtes',c+'urent'],fut:r+'vr',
+    subj:[c+'oive',c+'oives',c+'oive',r+'vions',r+'viez',c+'oivent'],
+    si:[c+'usse',c+'usses',c+'ût',c+'ussions',c+'ussiez',c+'ussent'],ipr:[c+'ois',r+'vons',r+'vez'],
+    pp:c+'u',agr:c+'u(e, s, es)',ppr:r+'vant',hint:'pres:1,2,3,6|subj:1,2,3,6|ps:*|si:*',model:pre==='re'?null:'recevoir',notes:[]};
+}
+const V={
+ voir:{pp:'vu',agr:'vu(e, s, es)',ppr:'voyant',pres:['vois','vois','voit','voyons','voyez','voient'],imp:'voy',
+  ps:['vis','vis','vit','vîmes','vîtes','virent'],fut:'verr',subj:['voie','voies','voie','voyions','voyiez','voient'],
+  si:['visse','visses','vît','vissions','vissiez','vissent'],ipr:['vois','voyons','voyez'],
+  hint:'pres:3,4|imp:3,4|subj:3,4|fut:*|cond:*',
+  notes:['Entrevoir and revoir conjugate exactly like voir. Prévoir and pourvoir are the exceptions.','Imparfait and subjonctif présent keep an i after the y: nous voyions, vous voyiez — even when you barely hear it.','Futur and conditionnel have a double r: je ver·rai, je ver·rais.']},
+ prévoir:{pp:'prévu',agr:'prévu(e, s, es)',ppr:'prévoyant',pres:['prévois','prévois','prévoit','prévoyons','prévoyez','prévoient'],imp:'prévoy',
+  ps:['prévis','prévis','prévit','prévîmes','prévîtes','prévirent'],fut:'prévoir',subj:['prévoie','prévoies','prévoie','prévoyions','prévoyiez','prévoient'],
+  si:['prévisse','prévisses','prévît','prévissions','prévissiez','prévissent'],ipr:['prévois','prévoyons','prévoyez'],
+  hint:'fut:*|cond:*',
+  notes:['Conjugates like voir, except futur and conditionnel, which keep the whole infinitive: je prévoi·rai, je prévoi·rais (not « préverrai »).']},
+ pourvoir:{pp:'pourvu',agr:'pourvu(e, s, es)',ppr:'pourvoyant',pres:['pourvois','pourvois','pourvoit','pourvoyons','pourvoyez','pourvoient'],imp:'pourvoy',
+  ps:['pourvus','pourvus','pourvut','pourvûmes','pourvûtes','pourvurent'],fut:'pourvoir',subj:['pourvoie','pourvoies','pourvoie','pourvoyions','pourvoyiez','pourvoient'],
+  si:['pourvusse','pourvusses','pourvût','pourvussions','pourvussiez','pourvussent'],ipr:['pourvois','pourvoyons','pourvoyez'],
+  hint:'fut:*|cond:*|ps:*|si:*',
+  notes:['Futur and conditionnel keep the infinitive, like prévoir: je pourvoi·rai.','Passé simple and subjonctif imparfait use u, not i: je pourvus, que je pourvusse.']},
+ savoir:{pp:'su',agr:'su(e, s, es)',ppr:'sachant',pres:['sais','sais','sait','savons','savez','savent'],imp:'sav',
+  ps:['sus','sus','sut','sûmes','sûtes','surent'],fut:'saur',subj:['sache','saches','sache','sachions','sachiez','sachent'],
+  si:['susse','susses','sût','sussions','sussiez','sussent'],ipr:['sache','sachons','sachez'],
+  hint:'ipr:*|subj:*|fut:*|cond:*',
+  notes:['Impératif sachons, sachez differs from both the indicatif (savons, savez) and the subjonctif (sachions, sachiez).','Literary turn with subjonctif: « Ce n\'est pas défendu, que je sache. »']},
+ devoir:{pp:'dû',agr:'dû (due, dus, dues)',ppr:'devant',pres:['dois','dois','doit','devons','devez','doivent'],imp:'dev',
+  ps:['dus','dus','dut','dûmes','dûtes','durent'],fut:'devr',subj:['doive','doives','doive','devions','deviez','doivent'],
+  si:['dusse','dusses','dût','dussions','dussiez','dussent'],ipr:['dois','devons','devez'],
+  hint:'pres:1,2,3,6|subj:1,2,3,6',
+  notes:['The participle dû takes a circumflex only in the masculine singular, to tell it apart from du (« elle boit du café »). Due, dus, dues have none.','The stem flips: doi- for je, tu, il, ils; dev- for nous, vous.']},
+ pouvoir:{pp:'pu',agr:'pu (invariable)',ppr:'pouvant',pres:['peux|puis','peux','peut','pouvons','pouvez','peuvent'],imp:'pouv',
+  ps:['pus','pus','put','pûmes','pûtes','purent'],fut:'pourr',subj:['puisse','puisses','puisse','puissions','puissiez','puissent'],
+  si:['pusse','pusses','pût','pussions','pussiez','pussent'],ipr:null,
+  hint:'pres:1,2|subj:*|fut:*|cond:*',
+  notes:['Je peux and tu peux end in -x.','Je puis is the formal variant, and it is required in inversion: Puis-je ?','Futur and conditionnel are written with two r but only one is pronounced: pourrai.','No impératif.']},
+ recevoir:Object.assign(cevoir('re'),{notes:['Verbs in -cevoir take a cedilla under the c before o or u, to keep the [s] sound: je reçois, but nous recevons.','The stem flips: reçoi- for je, tu, il, ils; recev- for nous, vous.','Same model: apercevoir, concevoir, décevoir, entrapercevoir, percevoir.']}),
+ mouvoir:{pp:'mû',agr:'mû (mue, mus, mues)',ppr:'mouvant',pres:['meus','meus','meut','mouvons','mouvez','meuvent'],imp:'mouv',
+  ps:['mus','mus','mut','mûmes','mûtes','murent'],fut:'mouvr',subj:['meuve','meuves','meuve','mouvions','mouviez','meuvent'],
+  si:['musse','musses','mût','mussions','mussiez','mussent'],ipr:['meus','mouvons','mouvez'],
+  hint:'pres:1,2,3,6|subj:1,2,3,6|ps:*|si:*|fut:*|cond:*',
+  notes:['The stem flips: meu- for je, tu, il, ils (je meus, ils meuvent); mouv- for nous, vous.','Participle mû has a circumflex only in the masculine singular (mue, mus, mues). Émouvoir and promouvoir write ému and promu with no accent.','Mouvoir itself is rare and formal; émouvoir is the everyday one.']},
+ pleuvoir:{pp:'plu',agr:'plu (invariable)',ppr:'pleuvant',only:[2,5],pres:['','','pleut','','','pleuvent'],imp:'pleuv',
+  ps:['','','plut','','','plurent'],fut:'pleuvr',subj:['','','pleuve','','','pleuvent'],si:['','','plût','','','plussent'],ipr:null,
+  hint:'pres:*|ps:*|si:*',
+  notes:['Impersonal: used almost only with il — il pleut, il a plu, il pleuvra.','The plural appears only figuratively: les critiques pleuvent (criticism is pouring in).','Its participle plu is the same as the participle of plaire.']},
+ avoir:{pp:'eu',agr:'eu(e, s, es)',ppr:'ayant',pres:['ai','as','a','avons','avez','ont'],imp:'av',
+  ps:['eus','eus','eut','eûmes','eûtes','eurent'],fut:'aur',subj:['aie','aies','ait','ayons','ayez','aient'],
+  si:['eusse','eusses','eût','eussions','eussiez','eussent'],ipr:['aie','ayons','ayez'],group:'auxiliaire',
+  hint:'pres:*|ps:*|fut:*|cond:*|subj:*|si:*|ipr:*',
+  notes:['Avoir is the auxiliary for every compound tense on this page: j\'ai vu, j\'avais reçu, j\'aurai su.','Subjonctif: que j\'aie, qu\'il ait (ends in t). Impératif aie has no s.','Eu, eus, eut are all pronounced [y], like the u in « tu ».']},
+};
+Object.assign(V,{
+ entrevoir:derive('voir','entre',{notes:['Like voir, including the double r: j\'entreverrai.']}),
+ revoir:derive('voir','re',{notes:['Like voir: je reverrai. « Au revoir » comes from this verb.']}),
+ dépourvoir:derive('pourvoir','dé',{notes:['Used mostly as a pronominal verb or as the participle: je me suis dépourvu de…, être dépourvu de (to lack).']}),
+ repourvoir:derive('pourvoir','re',{notes:['Like pourvoir: je repourvoirai, je repourvus.']}),
+ redevoir:derive('devoir','re',{pp:'redû',agr:'redû (redue, redus, redues)',notes:['Like devoir. The participle keeps the circumflex: redû. The 1990 spelling reform allows redu, since it is not confused with another word.']}),
+ apercevoir:cevoir('aper'), concevoir:cevoir('con'), décevoir:cevoir('dé'), entrapercevoir:cevoir('entraper'), percevoir:cevoir('per'),
+ émouvoir:derive('mouvoir','é',{pp:'ému',agr:'ému(e, s, es)',ps:['émus','émus','émut','émûmes','émûtes','émurent'],
+   si:['émusse','émusses','émût','émussions','émussiez','émussent'],notes:['Like mouvoir, but the participle ému has no circumflex.']}),
+ promouvoir:derive('mouvoir','pro',{pp:'promu',agr:'promu(e, s, es)',ps:['promus','promus','promut','promûmes','promûtes','promurent'],
+   si:['promusse','promusses','promût','promussions','promussiez','promussent'],notes:['Like émouvoir, participle promu (no accent). Mostly used in the infinitive, participles and compound tenses: il a été promu.']}),
+});
+V.apercevoir.notes=['S\'apercevoir de = to notice/realize: je m\'en suis aperçu.'];
+V.décevoir.notes=['Décevoir means to disappoint, not to deceive (that is tromper).'];
+const FAM=[['voir','entrevoir','revoir'],['prévoir'],['pourvoir','dépourvoir','repourvoir'],['savoir'],['devoir','redevoir'],['pouvoir'],
+ ['recevoir','apercevoir','concevoir','décevoir','entrapercevoir','percevoir'],['mouvoir','émouvoir','promouvoir'],['pleuvoir'],['avoir']];
+const TENSES=[
+ {mood:'Indicatif',id:'pres',name:'Présent',f:v=>v.pres},
+ {mood:'Indicatif',id:'imp',name:'Imparfait',f:v=>end(v.imp,IMP)},
+ {mood:'Indicatif',id:'fut',name:'Futur simple',f:v=>end(v.fut,FUT)},
+ {mood:'Indicatif',id:'ps',name:'Passé simple',f:v=>v.ps},
+ {mood:'Indicatif',id:'pc',name:'Passé composé',c:'pc'},
+ {mood:'Indicatif',id:'pqp',name:'Plus-que-parfait',c:'pqp'},
+ {mood:'Indicatif',id:'fa',name:'Futur antérieur',c:'fa'},
+ {mood:'Indicatif',id:'pa',name:'Passé antérieur',c:'pa'},
+ {mood:'Conditionnel',id:'cond',name:'Présent',f:v=>end(v.fut,IMP)},
+ {mood:'Conditionnel',id:'cp',name:'Passé',c:'cp'},
+ {mood:'Subjonctif',id:'subj',name:'Présent',f:v=>v.subj,q:1},
+ {mood:'Subjonctif',id:'sp',name:'Passé',c:'sp',q:1},
+ {mood:'Subjonctif',id:'si',name:'Imparfait',f:v=>v.si,q:1},
+ {mood:'Subjonctif',id:'spq',name:'Plus-que-parfait',c:'spq',q:1},
+ {mood:'Impératif',id:'ipr',name:'Présent',f:v=>v.ipr,im:1},
+ {mood:'Impératif',id:'ip',name:'Passé',c:'ip',im:1,f2:v=>v.ipr},
+];
+TENSES.forEach(t=>{if(t.c){t.f=v=>(t.im&&!v.ipr)?null:AUX[t.c].map(a=>a+' '+v.pp)}});
+// --- English glosses
+const EP=['I','you','he/she','we','you (all)','they'];
+const BE=['am','are','is','are','are','are'], WAS=['was','were','was','were','were','were'];
+const EN={
+ voir:{b:'see',s:'sees',p:'saw',pp:'seen',ing:'seeing'},
+ prévoir:{b:'foresee',s:'foresees',p:'foresaw',pp:'foreseen',ing:'foreseeing'},
+ pourvoir:{b:'provide',s:'provides',p:'provided',pp:'provided',ing:'providing'},
+ savoir:{b:'know',s:'knows',p:'knew',pp:'known',stat:1},
+ entrevoir:{b:'glimpse',s:'glimpses',p:'glimpsed',pp:'glimpsed',ing:'glimpsing'},
+ revoir:{b:'see again',s:'sees again',p:'saw again',pp:'seen again',ing:'seeing again'},
+ dépourvoir:{b:'deprive',s:'deprives',p:'deprived',pp:'deprived',ing:'depriving'},
+ repourvoir:{b:'provide again',s:'provides again',p:'provided again',pp:'provided again',ing:'providing again'},
+ redevoir:{b:'still owe',s:'still owes',p:'still owed',pp:'still owed',ing:'still owing'},
+ recevoir:{b:'receive',s:'receives',p:'received',pp:'received',ing:'receiving'},
+ apercevoir:{b:'notice',s:'notices',p:'noticed',pp:'noticed',ing:'noticing'},
+ concevoir:{b:'conceive',s:'conceives',p:'conceived',pp:'conceived',ing:'conceiving'},
+ décevoir:{b:'disappoint',s:'disappoints',p:'disappointed',pp:'disappointed',ing:'disappointing'},
+ entrapercevoir:{b:'catch a glimpse of',s:'catches a glimpse of',p:'caught a glimpse of',pp:'caught a glimpse of',ing:'catching a glimpse of'},
+ percevoir:{b:'perceive',s:'perceives',p:'perceived',pp:'perceived',ing:'perceiving'},
+ mouvoir:{b:'move',s:'moves',p:'moved',pp:'moved',ing:'moving'},
+ émouvoir:{b:'touch (move)',s:'touches',p:'touched',pp:'touched',ing:'touching'},
+ promouvoir:{b:'promote',s:'promotes',p:'promoted',pp:'promoted',ing:'promoting'},
+ pleuvoir:{b:'rain',s:'rains',p:'rained',pp:'rained',ing:'raining'},
+ avoir:{b:'have',s:'has',p:'had',pp:'had',ing:'having',stat:1},
+};
+const MODAL={ // templates: {p}=pronoun, {have}=have/has
+ pouvoir:{pres:'{p} can',imp:'{p} could',fut:'{p} will be able to',ps:'{p} could (literary)',pc:'{p} {was} able to',pqp:'{p} had been able to',fa:'{p} will have been able to',pa:'{p} had been able to (literary)',cond:'{p} could / would be able to',cp:'{p} could have',subj:'(that) {p} can',sp:'(that) {p} {was} able to',si:'(that) {p} could (literary)',spq:'(that) {p} had been able to'},
+ devoir:{pres:'{p} must / {have} to',imp:'{p} had to / {was} supposed to',fut:'{p} will have to',ps:'{p} had to (literary)',pc:'{p} had to / must have',pqp:'{p} had had to',fa:'{p} will have had to',pa:'{p} had had to (literary)',cond:'{p} should / ought to',cp:'{p} should have',subj:'(that) {p} must',sp:'(that) {p} had to',si:'(that) {p} had to (literary)',spq:'(that) {p} had had to',ipr:['Owe!','Let’s owe!','Owe!'],ip:['Have owed!','Let’s have owed!','Have owed!']}
+};
+function en(vk,t,i){
+  const m=MODAL[vk];
+  if(t.im){
+    if(m) return m[t.id][i];
+    const e=EN[vk]; const b=e.b[0].toUpperCase()+e.b.slice(1);
+    return t.id==='ipr'?[b+'!','Let’s '+e.b+'!',b+'! (you all)'][i]:['Have '+e.pp+'!','Let’s have '+e.pp+'!','Have '+e.pp+'! (you all)'][i];
+  }
+  const p=vk==='pleuvoir'?(i===2?'it':'they (fig.)'):EP[i], have=i===2?'has':'have';
+  if(m){const s=m[t.id];return s.replace('{p}',p).replace('{have}',have).replace('{was}',WAS[i])}
+  const e=EN[vk];
+  const T={pres:p+' '+(i===2?e.s:e.b)+(i===0&&!e.stat?' / am '+e.ing:''),
+    imp:e.stat?p+' '+e.p+' / used to '+e.b:p+' '+WAS[i]+' '+e.ing+' / used to '+e.b,
+    fut:p+' will '+e.b, ps:p+' '+e.p+' (literary)', pc:p+' '+e.p+' / '+have+' '+e.pp,
+    pqp:p+' had '+e.pp, fa:p+' will have '+e.pp, pa:p+' had '+e.pp+' (literary)',
+    cond:p+' would '+e.b, cp:p+' would have '+e.pp,
+    subj:'(that) '+p+' '+e.b, sp:'(that) '+p+' '+have+' '+e.pp, si:'(that) '+p+' '+e.p+' (literary)', spq:'(that) '+p+' had '+e.pp};
+  return T[t.id];
+}
+const PR=['je','tu','il','nous','vous','ils'], PRD=['je','tu','il/elle','nous','vous','ils/elles'], IMPP=['(tu)','(nous)','(vous)'];
+
+function pron(t,i,form,disp){
+  if(t.im) return disp?IMPP[i]:'';
+  let p=(disp?PRD:PR)[i];
+  const vow=/^[aeiouyéèêâîôûh]/i.test(form);
+  if(i===0&&vow) p="j'";
+  if(t.q){ p = (i===2||i===5) ? "qu'"+p : 'que '+p; }
+  return p;
+}
+function lines(vk,t){
+  const forms=t.f(V[vk]); if(!forms) return null;
+  const only=V[vk].only;
+  return forms.map((raw,i)=>(only&&!t.im&&!only.includes(i))?null:(raw=>{
+    const alts=raw.split('|'), form=alts[0];
+    const pd=pron(t,i,form,true), ps=pron(t,i,form,false);
+    const sep=ps.endsWith("'")?'':' ';
+    return {i,alts,form,disp:pd,en:en(vk,t,i),speak:(ps?ps+sep:'')+form+(t.im?' !':''),pre:pd};
+  })(raw)).filter(Boolean);
+}
+
+// --- state
+const store={get(k,d){try{const v=localStorage.getItem('oir.'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('oir.'+k,JSON.stringify(v))}catch(e){}}};
+let S={verb:store.get('verb','voir'),tense:store.get('tense','pres'),tab:'table',mixv:false,mixt:false,
+  score:store.get('score',{streak:0,ok:0,all:0}),en:store.get('en',true)};
+const $=id=>document.getElementById(id);
+if(!V[S.verb])S.verb='voir';
+$('entog').checked=S.en;
+$('entog').onchange=e=>{S.en=e.target.checked;store.set('en',S.en);if(S.tab==='table')renderTable();else if(Q&&!answered)showHint()};
+function showHint(){const h=$('q-hint');if(h)h.hidden=!S.en||S.tab==='dict'}
+
+// --- speech
+const synth=window.speechSynthesis; let voices=[], voice=null;
+function loadVoices(){
+  if(!synth) {$('nospeech').hidden=false;$('voice').parentElement.hidden=true;return}
+  voices=synth.getVoices().filter(v=>/^fr/i.test(v.lang));
+  const sel=$('voice'); const saved=store.get('voice',null);
+  sel.innerHTML=voices.map((v,i)=>`<option value="${i}">${v.name.replace(/\s*\(.*\)/,'')} · ${v.lang.slice(3)||'fr'}</option>`).join('');
+  if(!voices.length){$('nospeech').hidden=!synth.getVoices().length?true:false;return}
+  $('nospeech').hidden=true;
+  let idx=voices.findIndex(v=>v.name===saved);
+  if(idx<0) idx=voices.findIndex(v=>/CA/i.test(v.lang)); if(idx<0) idx=voices.findIndex(v=>/FR/i.test(v.lang)); if(idx<0) idx=0;
+  sel.value=idx; voice=voices[idx];
+}
+if(synth){loadVoices(); synth.onvoiceschanged=loadVoices; setTimeout(()=>{if(!voices.length){loadVoices(); if(!voices.length) $('nospeech').hidden=false}},1500)}
+else $('nospeech').hidden=false;
+$('voice').onchange=e=>{voice=voices[+e.target.value];store.set('voice',voice&&voice.name)};
+function say(text,onend){
+  if(!synth){onend&&onend();return}
+  const u=new SpeechSynthesisUtterance(text); u.lang=voice?voice.lang:'fr-FR'; if(voice)u.voice=voice;
+  u.rate=+$('rate').value; u.onend=()=>onend&&onend(); u.onerror=()=>onend&&onend();
+  synth.speak(u);
+}
+let seqId=0;
+function stopSeq(){seqId++; if(synth)synth.cancel(); document.querySelectorAll('.line.on').forEach(e=>e.classList.remove('on')); $('stop').hidden=true;$('playall').hidden=false}
+
+// --- render
+function renderVerbs(){
+  $('verbs').innerHTML=FAM.map(f=>`<div class="fam">${f.map((k,j)=>`<button class="chip${j?' der':''}" aria-pressed="${k===S.verb}" data-v="${k}">${k}</button>`).join('')}</div>`).join('');
+}
+function renderTenses(){
+  const moods=[...new Set(TENSES.map(t=>t.mood))];
+  $('tenses').innerHTML=moods.map(m=>`<div class="mood"><span class="label">${m}</span>${TENSES.filter(t=>t.mood===m).map(t=>{
+    const dis=!t.f(V[S.verb]);return `<button class="chip small" data-t="${t.id}" aria-pressed="${t.id===S.tense}" ${dis?'disabled style="opacity:.35"':''}>${t.name}</button>`}).join('')}</div>`).join('');
+  $('tenses').style.opacity=(S.tab!=='table'&&S.mixt)?.45:1;
+}
+function hl(vk,tid,i,form){
+  const h=V[vk].hint.split('|').map(s=>s.split(':')).find(([k])=>k===tid);
+  if(!h) return form;
+  return (h[1]==='*'||h[1].split(',').includes(String(i+1)))?`<b>${form}</b>`:form;
+}
+function renderTable(){
+  const t=TENSES.find(x=>x.id===S.tense); let L=lines(S.verb,t);
+  if(!L){S.tense='pres';return renderAll()}
+  const vv=V[S.verb];$('vt-title').innerHTML=`${S.verb}<small>${vv.group||'3ᵉ groupe'}${vv.model?' · like '+vv.model:''}</small>`;
+  $('vt-tense').textContent=t.mood+' · '+t.name;
+  const spk='<svg class="spk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>';
+  $('rows').innerHTML=L.map(l=>`<tr><td><button class="line" data-i="${l.i}"><span class="pron">${l.disp}</span><span class="form">${hl(S.verb,t.id,l.i,l.alts.join(' / '))}${S.en?`<span class="en">${l.en}</span>`:''}</span>${spk}</button></td></tr>`).join('');
+  const v=V[S.verb];
+  $('extra').innerHTML=`<div><span class="label">Infinitif</span><span>${S.verb} · avoir ${v.pp}</span></div>
+   <div><span class="label">Participe présent</span><span>${v.ppr}</span></div>
+   <div><span class="label">Participe passé</span><span>${v.agr} · ayant ${v.pp}</span></div>`;
+  $('notes').innerHTML=`<span class="label">À retenir · ${S.verb}</span><ul>${allNotes(S.verb).map(n=>`<li>${n}</li>`).join('')}</ul>`;
+}
+function renderAll(){
+  renderVerbs();renderTenses();
+  ['table','quiz','dict'].forEach(k=>$('tab-'+k).setAttribute('aria-selected',S.tab===k));
+  $('view-table').hidden=S.tab!=='table'; $('view-quiz').hidden=S.tab==='table';
+  if(S.tab==='table') renderTable(); else { renderTableNotesOnly(); }
+  store.set('verb',S.verb);store.set('tense',S.tense);
+}
+function allNotes(k){const v=V[k];return v.model?v.notes.concat(V[v.model].notes):v.notes}
+function renderTableNotesOnly(){const v=V[S.verb];$('notes').innerHTML=`<span class="label">À retenir · ${S.verb}</span><ul>${allNotes(S.verb).map(n=>`<li>${n}</li>`).join('')}</ul>`}
+
+// --- events
+$('verbs').onclick=e=>{const b=e.target.closest('[data-v]');if(!b)return;stopSeq();S.verb=b.dataset.v;renderAll();if(S.tab!=='table')newQ()};
+$('tenses').onclick=e=>{const b=e.target.closest('[data-t]');if(!b||b.disabled)return;stopSeq();S.tense=b.dataset.t;if(S.tab!=='table'){S.mixt=false;$('mixt').setAttribute('aria-pressed',false)}renderAll();if(S.tab!=='table')newQ()};
+['table','quiz','dict'].forEach(k=>$('tab-'+k).onclick=()=>{stopSeq();S.tab=k;renderAll();if(k!=='table')newQ()});
+$('rows').onclick=e=>{const b=e.target.closest('.line');if(!b)return;stopSeq();
+  const t=TENSES.find(x=>x.id===S.tense);const l=lines(S.verb,t).find(x=>x.i===+b.dataset.i);b.classList.add('on');say(l.speak,()=>b.classList.remove('on'))};
+$('playall').onclick=()=>{
+  stopSeq();const id=++seqId;const t=TENSES.find(x=>x.id===S.tense);const L=lines(S.verb,t);
+  $('playall').hidden=true;$('stop').hidden=false;
+  const btns=[...document.querySelectorAll('.line')];
+  const step=i=>{
+    if(id!==seqId)return;
+    if(i>=L.length){ if($('loop').checked) return setTimeout(()=>step(0),900); return stopSeq(); }
+    btns.forEach(b=>b.classList.remove('on'));btns[i].classList.add('on');
+    say(L[i].speak,()=>{if(id!==seqId)return;const gap=$('shadow').checked?Math.max(1600,L[i].speak.length*130/ +$('rate').value):350;setTimeout(()=>step(i+1),gap)});
+  };
+  // short intro: name the tense
+  say(S.verb+'. '+t.mood+' '+t.name.toLowerCase()+'.',()=>setTimeout(()=>step(0),400));
+};
+$('stop').onclick=stopSeq;
+$('rate').value=store.get('rate',0.85);$('rate').oninput=e=>store.set('rate',+e.target.value);
+$('shadow').checked=store.get('shadow',false);$('shadow').onchange=e=>store.set('shadow',e.target.checked);
+
+// --- quiz
+let Q=null, answered=false;
+const norm=s=>s.toLowerCase().replace(/[’`]/g,"'").replace(/\s+/g,' ').trim();
+const strip=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'');
+function newQ(){
+  answered=false;
+  const vks=S.mixv?Object.keys(V):[S.verb];
+  let tries=0;
+  do{
+    const vk=vks[Math.floor(Math.random()*vks.length)];
+    const pool=S.mixt?TENSES:[TENSES.find(t=>t.id===S.tense)];
+    const t=pool[Math.floor(Math.random()*pool.length)];
+    const L=lines(vk,t); if(!L){tries++;continue}
+    const l=L[Math.floor(Math.random()*L.length)];
+    Q={vk,t,l};break;
+  }while(tries<40);
+  const dict=S.tab==='dict';
+  $('q-hear').hidden=!dict;
+  $('q-pre').textContent=dict?'':Q.l.pre;
+  $('q-prompt').innerHTML=dict
+    ? `<span class="big">Listen and write</span>Write the whole line you hear, pronoun included.`
+    : `<span class="big">${Q.vk}</span><span class="tag">${Q.t.mood}</span><span class="tag">${Q.t.name}</span><span class="tag">${PRD[Q.t.im?[1,3,4][Q.l.i]:Q.l.i]}</span><span class="en" id="q-hint">“${Q.l.en}”</span>`;
+  showHint();
+  $('q-in').value='';$('q-in').placeholder=dict?'e.g. nous voyons':'type the form';
+  $('q-fb').innerHTML='';$('q-check').textContent='Check';
+  $('q-in').focus({preventScroll:true});
+  if(dict) say(Q.l.speak);
+  renderScore();
+}
+function renderScore(){$('s-streak').textContent=S.score.streak;$('s-ok').textContent=S.score.ok;$('s-all').textContent=S.score.all}
+function check(){
+  if(answered) return newQ();
+  const dict=S.tab==='dict'; let a=norm($('q-in').value); if(!a) return;
+  let targets=Q.l.alts.map(f=>norm(f));
+  if(dict){ const p=Q.l.speak.replace(/ !$/,'').replace(/^(.*?)(j'|\s)[^ ]*$/, ''); targets=Q.l.alts.map(f=>norm(Q.l.speak.replace(Q.l.form,f).replace(/ !$/,''))); a=a.replace(/[!.]$/,''); }
+  else { a=a.replace(/^(que |qu'|j'|je |tu |il |elle |nous |vous |ils |elles )+/,''); }
+  const exact=targets.includes(a), near=!exact&&targets.map(strip).includes(strip(a));
+  answered=true; S.score.all++;
+  if(exact){S.score.ok++;S.score.streak++}else S.score.streak=0;
+  store.set('score',S.score);
+  const sol=dict?Q.l.speak.replace(/ !$/,''):(Q.l.pre?Q.l.pre+(Q.l.pre.endsWith("'")?'':' '):'')+Q.l.alts.join(' / ');
+  $('q-fb').innerHTML=exact?`<div class="fb ok">Correct ✓<span class="sol">${sol}</span>${S.en?`<span style="display:block;font-weight:400;color:var(--muted)">${Q.l.en}</span>`:''}</div>`
+    : near?`<div class="fb near">Almost — check the accents<span class="sol">${sol}</span>${S.en?`<span style="display:block;font-weight:400;color:var(--muted)">${Q.l.en}</span>`:''}</div>`
+    : `<div class="fb bad">Not quite<span class="sol">${sol}</span>${S.en?`<span style="display:block;font-weight:400;color:var(--muted)">${Q.l.en}</span>`:''}</div>`;
+  $('q-check').textContent='Next →'; renderScore();
+  say(Q.l.speak);
+}
+$('q-check').onclick=check;
+$('q-in').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();check()}});
+$('q-skip').onclick=()=>{if(answered)return newQ();$('q-in').value='';answered=false;S.score.streak=0;S.score.all++;store.set('score',S.score);answered=true;
+  const sol=S.tab==='dict'?Q.l.speak:(Q.l.pre?Q.l.pre+' ':'')+Q.l.alts.join(' / ');
+  $('q-fb').innerHTML=`<div class="fb bad">Answer<span class="sol">${sol}</span></div>`;$('q-check').textContent='Next →';renderScore();say(Q.l.speak)};
+$('q-hear').onclick=()=>Q&&say(Q.l.speak);
+$('acc').innerHTML=['é','è','ê','à','â','î','ï','ô','û','ç',"'"].map(c=>`<button type="button" data-c="${c}">${c}</button>`).join('');
+$('acc').onclick=e=>{const b=e.target.closest('[data-c]');if(!b)return;const inp=$('q-in');const s=inp.selectionStart??inp.value.length,en=inp.selectionEnd??s;
+  inp.value=inp.value.slice(0,s)+b.dataset.c+inp.value.slice(en);inp.focus();inp.setSelectionRange(s+1,s+1)};
+$('mixv').onclick=e=>{S.mixv=!S.mixv;e.target.setAttribute('aria-pressed',S.mixv);newQ()};
+$('mixt').onclick=e=>{S.mixt=!S.mixt;e.target.setAttribute('aria-pressed',S.mixt);renderTenses();newQ()};
+
+renderAll();
+</script>
+
+</body>
+</html>
